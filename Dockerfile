@@ -13,9 +13,6 @@ RUN rsync -a /tmp/centos-7/etc/httpd /etc/ && \
     apachectl configtest
 RUN rsync -a /tmp/centos-7/etc/php* /etc/
 
-# COPY conf/supervisord.conf /etc/supervisord.conf
-# COPY conf/lamp.sh /etc/lamp.sh
-
 # Install Pimpmylog
 RUN git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
 COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
@@ -32,14 +29,29 @@ RUN mkdir -p /var/log/httpd && \
     chmod a+rx /var/log/httpd/ && \
     chown -R apache /var/log/httpd/
 
-# Install Mailcatcher and Dependencies
+# Install Mailcatcher Dependencies.
+RUN yum -y update && \
+    yum -y install \
+    rubygems \
+    ruby-devel \
+    sqlite-devel
+# Install Mailcatcher.
+RUN gem install mailcatcher
+# Tell PHP to use mailcatcher
+COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
 
-# # Install Bundler and Theme related tweaks
-# RUN gem install bundler
-# RUN export LC_ALL="C.UTF-8"
+# Install Bundler and Theme related tweaks
+RUN gem install bundler
 
-# Expose ports
-EXPOSE 80 443
+# Process management
+COPY conf/supervisord.conf /etc/supervisord.conf
+# COPY conf/lamp.sh /etc/lamp.sh
+
+# Apache on HTTP: 80
+# Apache on HTTPS: 443
+# Mailcatcher on HTTP: 1080
+# Mailcatcher on SMTP: 1025
+EXPOSE 80 443 1025 1080
 
 RUN chmod +x /etc/lamp.sh
 CMD ["/etc/lamp.sh"]
