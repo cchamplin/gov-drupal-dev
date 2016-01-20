@@ -1,0 +1,33 @@
+# App Container
+web:
+  # Use the usdaeas/gov-drupal-dev image
+  # https://hub.docker.com/r/usdaeas/gov-drupal-dev/
+  image: usdaeas/gov-drupal-dev
+  # container_name must be a unique value
+  # You must change your container_name to run multiple containers for the same site.
+  container_name: local.example.gov
+  hostname: local.example.gov
+  # Container variables
+  ports:
+    # Map Host machine's port to port 80 and 443
+    - "80:80"
+    - "443:443"
+  volumes:
+    # Sets current directory to public web directory
+    - .:/var/www/public
+  links:
+    - mysql:db
+  restart: always
+
+# MySQL Server
+mysql:
+  image: mysql:5.7
+  environment:
+    MYSQL_USER: user
+    MYSQL_PASSWORD: user
+    MYSQL_DATABASE: drupal
+    MYSQL_ROOT_PASSWORD: ''
+    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+  expose:
+    - "3306"
+  restart: always
