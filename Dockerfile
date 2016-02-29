@@ -30,8 +30,7 @@ RUN mkdir -p /var/log/httpd && \
     chown -R apache /var/log/httpd/
 
 # Install Mailcatcher Dependencies.
-RUN yum -y update && \
-    yum -y install \
+RUN yum -y install \
     rubygems \
     ruby-devel \
     sqlite-devel
