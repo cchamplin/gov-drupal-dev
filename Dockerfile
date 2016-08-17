@@ -1,4 +1,4 @@
-FROM usdaeas/gov-drupal
+FROM usdaeas/gov-drupal:php54
 MAINTAINER Ron Williams <hello@ronwilliams.io>
 ENV PATH /usr/local/src/vendor/bin/:/usr/local/rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -14,7 +14,7 @@ RUN rsync -a /tmp/centos-7/etc/httpd /etc/ && \
 RUN rsync -a /tmp/centos-7/etc/php* /etc/
 
 # Install Pimpmylog
-RUN git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
+RUN mkdir -p /usr/local/share/lap-docker/logs && git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
 COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
 # Creates default configuration file
 COPY conf/pimpmylog/config.user.php /usr/local/share/lap-docker/logs/config.user.php
@@ -44,7 +44,7 @@ RUN gem install bundler
 
 # Process management
 COPY conf/supervisord.conf /etc/supervisord.conf
-# COPY conf/lamp.sh /etc/lamp.sh
+COPY conf/lamp.sh /etc/lamp.sh
 
 # Apache on HTTP: 80
 # Apache on HTTPS: 443
