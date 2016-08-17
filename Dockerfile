@@ -41,7 +41,6 @@ RUN gem install mailcatcher
 # Tell PHP to use mailcatcher
 COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
 
-
 # Install Bundler and Theme related tweaks
 RUN gem install bundler
 

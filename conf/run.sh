@@ -5,6 +5,8 @@
 # if it thinks it is already running.
 rm -rf /run/httpd/* /tmp/httpd*
 
+# This really should be in a spearte container
+exec /bin/bash -c "mailcatcher --smtp-port 1025 --http-ip=0.0.0.0 -f" &
+
 exec /usr/sbin/apachectl -DFOREGROUND
 
-exec /bin/bash -c "mailcatcher --smtp-port 1025 --http-ip=0.0.0.0 -f" -DBACKGROUND
