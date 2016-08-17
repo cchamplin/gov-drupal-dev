@@ -1,7 +1,5 @@
 FROM usdaeas/gov-drupal:php54
-MAINTAINER Ron Williams <hello@ronwilliams.io>
-ENV PATH /usr/local/src/vendor/bin/:/usr/local/rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
+MAINTAINER Jerry Eshbaugh <Jerry@TheStrategicProduct.com>
 
 # Add Dev tools,etc to directory
 COPY conf/tools/ /usr/local/share/lap-docker/
@@ -14,10 +12,14 @@ RUN rsync -a /tmp/centos-7/etc/httpd /etc/ && \
 RUN rsync -a /tmp/centos-7/etc/php* /etc/
 
 # Install Pimpmylog
-RUN mkdir -p /usr/local/share/lap-docker/logs && git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
-COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
+# using either git clone or wget both fail hangs on build with a timeout, although it sometimes works 
+# when exected into the container
+# tested using a separate bash script and experience the same issue
+#RUN mkdir -p /usr/local/share/lap-docker/logs && chmod 777 /usr/local/share/lap-docker/logs && git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
+#RUN wget -O - https://github.com/potsky/PimpMyLog/tarball/master | tar xzvf - && mv potsky-PimpMyLog-* /usr/local/share/lap-docker
+#COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
 # Creates default configuration file
-COPY conf/pimpmylog/config.user.php /usr/local/share/lap-docker/logs/config.user.php
+#COPY conf/pimpmylog/config.user.php /usr/local/share/lap-docker/logs/config.user.php
 
 # Allows apache to read log files directly
 RUN mkdir -p /var/log/httpd && \
@@ -38,6 +40,7 @@ RUN yum -y install \
 RUN gem install mailcatcher
 # Tell PHP to use mailcatcher
 COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
+
 
 # Install Bundler and Theme related tweaks
 RUN gem install bundler
