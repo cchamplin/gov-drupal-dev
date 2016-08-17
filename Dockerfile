@@ -42,15 +42,11 @@ COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
 # Install Bundler and Theme related tweaks
 RUN gem install bundler
 
-# Process management
-COPY conf/supervisord.conf /etc/supervisord.conf
-COPY conf/lamp.sh /etc/lamp.sh
-
-# Apache on HTTP: 80
-# Apache on HTTPS: 443
 # Mailcatcher on HTTP: 1080
 # Mailcatcher on SMTP: 1025
-EXPOSE 80 443 1025 1080
+EXPOSE 1025 1080
 
-RUN chmod +x /etc/lamp.sh
-CMD ["/etc/lamp.sh"]
+# Process management
+COPY conf/run.sh /run.sh
+RUN chmod +x /run.sh
+CMD ["/run.sh"]
