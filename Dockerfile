@@ -45,10 +45,14 @@ COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
 # Install Bundler and Theme related tweaks
 RUN gem install bundler
 
-# Add mail catcher ports
+# Add mailcatcher ports
 # Mailcatcher on HTTP: 1080
 # Mailcatcher on SMTP: 1025
 EXPOSE 1025 1080
+
+# Overwrite base mail cofig to use mailcatcher
+COPY conf/mail.ini /etc/php.d/mail.ini
+RUN chmod 644 /etc/php.d/mail.ini
 
 # Process management
 COPY conf/run.sh /run.sh
