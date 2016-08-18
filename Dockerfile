@@ -22,15 +22,11 @@ RUN rsync -a /tmp/centos-7/etc/httpd /etc/ && \
 RUN rsync -a /tmp/centos-7/etc/php* /etc/
 
 # Install Pimpmylog
-# using either git clone or wget both fail hangs on build with a timeout, although it sometimes works 
-# when exected into the container
-# tested using a separate bash script and experience the same issue
-RUN git clone https://github.com/eshbaugh/DevOps.git
-#RUN mkdir -p /usr/local/share/lap-docker/logs && chmod 777 /usr/local/share/lap-docker/logs && git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
-#RUN wget -O - https://github.com/potsky/PimpMyLog/tarball/master | tar xzvf - && mv potsky-PimpMyLog-* /usr/local/share/lap-docker
-#COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
+# Warning: There are random issues with git clone timing out on NITC IaaS that are not seen on other VMs
+RUN mkdir -p /usr/local/share/lap-docker/logs && chmod 777 /usr/local/share/lap-docker/logs && git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
+COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
 # Creates default configuration file
-#COPY conf/pimpmylog/config.user.php /usr/local/share/lap-docker/logs/config.user.php
+COPY conf/pimpmylog/config.user.php /usr/local/share/lap-docker/logs/config.user.php
 
 # Allows apache to read log files directly
 RUN mkdir -p /var/log/httpd && \
