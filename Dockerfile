@@ -1,5 +1,15 @@
-FROM usdaeas/gov-drupal:php54
+#FROM usdaeas/gov-drupal:php54
+# TODO DELETE NEXT LINE 
+FROM gd54
+
 MAINTAINER Jerry Eshbaugh <Jerry@TheStrategicProduct.com>
+
+RUN yum -y install \
+    rubygems \
+    ruby-devel \
+    tmux \
+    git \
+    sqlite-devel
 
 # Add Dev tools,etc to directory
 COPY conf/tools/ /usr/local/share/lap-docker/
@@ -15,6 +25,7 @@ RUN rsync -a /tmp/centos-7/etc/php* /etc/
 # using either git clone or wget both fail hangs on build with a timeout, although it sometimes works 
 # when exected into the container
 # tested using a separate bash script and experience the same issue
+RUN git clone https://github.com/eshbaugh/DevOps.git
 #RUN mkdir -p /usr/local/share/lap-docker/logs && chmod 777 /usr/local/share/lap-docker/logs && git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
 #RUN wget -O - https://github.com/potsky/PimpMyLog/tarball/master | tar xzvf - && mv potsky-PimpMyLog-* /usr/local/share/lap-docker
 #COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
@@ -31,12 +42,6 @@ RUN mkdir -p /var/log/httpd && \
     chmod a+rx /var/log/httpd/ && \
     chown -R apache /var/log/httpd/
 
-# Install Mailcatcher Dependencies.
-RUN yum -y install \
-    rubygems \
-    ruby-devel \
-    sqlite-devel
-# Install Mailcatcher.
 RUN gem install mailcatcher
 # Tell PHP to use mailcatcher
 COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
@@ -44,6 +49,7 @@ COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
 # Install Bundler and Theme related tweaks
 RUN gem install bundler
 
+# Add mail catcher ports
 # Mailcatcher on HTTP: 1080
 # Mailcatcher on SMTP: 1025
 EXPOSE 1025 1080
