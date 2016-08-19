@@ -22,7 +22,7 @@ RUN rsync -a /tmp/centos-7/etc/httpd /etc/ && \
 RUN rsync -a /tmp/centos-7/etc/php* /etc/
 
 # Install Pimpmylog
-# Warning: There are random issues with git clone timing out on NITC IaaS that are not seen on other VMs
+# Visit localhost:80/lap-docker then click on logs to access
 RUN mkdir -p /usr/local/share/lap-docker/logs && chmod 777 /usr/local/share/lap-docker/logs && git clone https://github.com/potsky/PimpMyLog.git /usr/local/share/lap-docker/logs/
 COPY conf/pimpmylog/pimpmylog.ini /etc/php.d/pimpmylog.ini
 # Creates default configuration file
@@ -45,14 +45,13 @@ COPY conf/mailcatcher/mailcatcher.ini /etc/php.d/mailcatcher.ini
 # Install Bundler and Theme related tweaks
 RUN gem install bundler
 
-# Add mailcatcher ports
-# Mailcatcher on HTTP: 1080
-# Mailcatcher on SMTP: 1025
-EXPOSE 1025 1080
-
 # Overwrite base mail cofig to use mailcatcher
 COPY conf/mail.ini /etc/php.d/mail.ini
 RUN chmod 644 /etc/php.d/mail.ini
+
+
+# Add mailcatcher port
+EXPOSE 1080
 
 # Process management
 COPY conf/run.sh /run.sh
