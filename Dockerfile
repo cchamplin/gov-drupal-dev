@@ -1,11 +1,10 @@
 FROM usdaeas/gov-drupal:php56
-MAINTAINER Jerry Eshbaugh <Jerry@TheStrategicProduct.com>
+MAINTAINER Ron Williams <hello@ronwilliams.io>
 
 RUN yum -y install \
     rubygems \
     ruby-devel \
     tmux \
-    git \
     sqlite-devel
 
 # Add Dev tools,etc to directory
