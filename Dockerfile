@@ -1,5 +1,4 @@
 FROM usdaeas/gov-drupal:php54
-
 MAINTAINER Jerry Eshbaugh <Jerry@TheStrategicProduct.com>
 
 RUN yum -y install \
