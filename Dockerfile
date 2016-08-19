@@ -1,6 +1,4 @@
-#FROM usdaeas/gov-drupal:php54
-# TODO DELETE NEXT LINE 
-FROM gd54
+FROM usdaeas/gov-drupal:php54
 
 MAINTAINER Jerry Eshbaugh <Jerry@TheStrategicProduct.com>
 
@@ -48,7 +46,6 @@ RUN gem install bundler
 # Overwrite base mail cofig to use mailcatcher
 COPY conf/mail.ini /etc/php.d/mail.ini
 RUN chmod 644 /etc/php.d/mail.ini
-
 
 # Add mailcatcher port
 EXPOSE 1080
