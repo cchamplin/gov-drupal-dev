@@ -1,4 +1,4 @@
-<?php $mailcatcher = "http://$_SERVER[HTTP_HOST]:1080" ?>
+<?php $mailcatcher = "http://$_SERVER[SERVER_NAME]:1080" ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
