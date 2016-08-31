@@ -1,4 +1,4 @@
-FROM usdaeas/gov-drupal:php70
+FROM usdaeas/gov-drupal
 MAINTAINER Ron Williams <hello@ronwilliams.io>
 
 RUN yum -y install \
