@@ -2,7 +2,7 @@
 web:
   # Use the usdaeas/gov-drupal-dev image
   # https://hub.docker.com/r/usdaeas/gov-drupal-dev/
-  image: usdaeas/gov-drupal-dev
+  image: usdaeas/gov-drupal-dev:php56
   # container_name must be a unique value
   # You must change your container_name to run multiple containers for the same site.
   container_name: local.example.gov
